@@ -3,7 +3,7 @@ require 'student'
 describe Student do
     let(:student){Student.new}
     it "does not have an award" do
-      expect(student).to be false
+      expect(student.has_unixoid?).to be false
     end
 
     it "can have badges awarded" do
@@ -13,7 +13,7 @@ describe Student do
 
     it "can have badges de-awarded" do
       student.award :unixoid
-      student.awards = []
+      student.remove_award :unixoid
       expect(student.has_unixoid?).to be false
     end
 

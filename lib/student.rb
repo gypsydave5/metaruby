@@ -1,23 +1,28 @@
 class Student
 
-  attr_accessor :awards
+  def initialize
+    @awards = []
+  end
 
-  def method_missing(name, *args)
+  def award *awards
+    @awards += awards
+    awards.each do |award_name|
+      self.send(:define_singleton_method, "has_#{award_name}?") do
+        @awards.include? award_name
+      end
+    end
+  end
+
+  def method_missing name
     if /^has_.+?\?/.match(name.to_s)
       false
-    elsif name == :award
-      @awards ||= []
-      @awards += args
-      args.each do |award_name|
-        self.send(:define_singleton_method, "has_#{award_name}?") do
-          return true if @awards.include? award_name
-          false
-        end
-      end
-      self
     else
       super name
     end
+  end
+
+  def remove_award award
+    @awards.delete(award)
   end
 
 end
